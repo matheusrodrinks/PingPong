@@ -15,6 +15,16 @@ let yRaquete = 155;
 let raqueteComprimento = 10;
 let raqueteAltura = 80;
 
+//variáveis da raquete do oponente
+let xRaqueteOponente = 585;
+let yRaqueteOponente = 150; 
+let velocidadeYOponente;
+
+let colidiu = false;
+
+//placar do jogo
+let meusPontos = 0;
+let pontosOponente = 0;
 
 function setup() {
   createCanvas(600, 400);
@@ -25,17 +35,27 @@ function draw() {
   mostraBolinha();
   movimentaBolinha();
   verificaColisaoBorda();
-  mostraRaquete();
+  mostraRaquete(xRaquete, yRaquete);
   movimentaMinhaRaquete();
-  verificaColisaoRaquete();
+  //verificaColisaoRaquete();
+  verificaColisaoRaquete(xRaquete,yRaquete);
+  mostraRaquete(xRaqueteOponente, yRaqueteOponente);
+  movimentaRaqueteOponente();
+ verificaColisaoRaquete(xRaqueteOponente,yRaqueteOponente);
+  incluiPlacar();
+  marcaPonto();
 }
 
 function mostraBolinha(){
   circle(xBolinha,yBolinha,diametro)
 }
 
-function mostraRaquete(){
-  rect(xRaquete, yRaquete, raqueteComprimento, raqueteAltura)
+function mostraRaquete(x,y){
+  rect(x, y, raqueteComprimento, raqueteAltura)
+}
+
+function mostraRaqueteOponente(){
+  rect(xRaqueteOponente, yRaqueteOponente, raqueteComprimento, raqueteAltura)
 }
 
 function movimentaBolinha(){
@@ -65,5 +85,34 @@ function verificaColisaoRaquete(){
   if (xBolinha - raio < xRaquete + raqueteComprimento && yBolinha - raio < yRaquete + raqueteAltura && yBolinha + raio > yRaquete)
 {
     velocidadeXBolinha *= -1;
+  }
+}
+
+function verificaColisaoRaquete(x,y){
+    colidiu = 
+  collideRectCircle(x, y, raqueteComprimento, raqueteAltura, xBolinha, yBolinha, raio);
+  if (colidiu) {
+    velocidadeXBolinha *= -1;
+  }
+}
+
+function movimentaRaqueteOponente(){
+  velocidadeYOponente = yBolinha - yRaqueteOponente - raqueteComprimento / 2 - 30;
+  yRaqueteOponente += velocidadeYOponente
+}
+
+function incluiPlacar(){
+  textSize(16)
+  fill(255)
+  text(meusPontos, 278,26);
+  text(pontosOponente, 321, 26);
+}
+
+function marcaPonto(){
+  if (xBolinha > 590){
+    meusPontos+= 1
+  }
+  if (xBolinha < 10){
+    pontosOponente += 1
   }
 }
